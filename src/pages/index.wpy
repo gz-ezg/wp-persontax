@@ -1,11 +1,13 @@
 <style lang="less">
 .container{
   padding:20rpx;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position: absolute;
+  // top: 0;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
+  // background-color: #f64a42;
+  // background-size:80px 60px;
 }
 .submitButton .van-button--large{
   margin-top:20rpx
@@ -54,7 +56,7 @@
 .van-panel-red .van-cell__title{
   margin-top: 40rpx;
   text-align: center;
-  color: #f64a42
+  // color: #f64a42
 }
 </style>
 <template>
@@ -75,7 +77,7 @@
       </van-tabs>
     </van-panel>
     <block wx:if="{{result}}">
-      <view style="width:90%;margin:auto">
+      <view>
         <van-panel-red title="计算结果" class="red-title">
           <van-cell-group>
             <van-cell title="应缴个税" value="{{taxTotal}}"></van-cell>
@@ -90,94 +92,97 @@
         </van-panel-red>
         <view>
           <pie taxTotal="{{taxTotal}}" taxAfter="{{taxAfter}}"></pie>
+          <Table></Table>
         </view>
       </view>
     </block>
     <block wx:else>
-      <van-panel title="抵扣项" class="panel-content" >
-        <van-cell-group>
-          <van-cell class="cell-title" title="子女教育 1000/人/月" @click="open_detail({{children}})" border="{{false}}">
-            <view slot="icon">
-              <van-icon name="info-o" />
-            </view>
-          </van-cell>
-          <van-cell title="抵扣方式" class="small" border="{{false}}">
-            <van-row class="flex-box">
-              <van-col offset="4" span="10"><van-button round size="small" type="{{ childrenUseNum == 1 ? 'primary':'default'}}" @click="childrenUseNumChange('1')">共同使用</van-button></van-col>
-              <van-col span="10"><van-button round size="small" type="{{ childrenUseNum == 2 ? 'primary':'default'}}" @click="childrenUseNumChange('2')">单独使用</van-button></van-col>
-            </van-row>
-          </van-cell>
-          <van-cell title="子女数" class="small" >
-            <van-row class="flex-box">
-              <van-col span="8"><van-button round size="small" type="{{ childrenNum == 1 ? 'primary':'default'}}" @click="childrenNumChange('1')">1</van-button></van-col>
-              <van-col span="8"><van-button round size="small" type="{{ childrenNum == 2 ? 'primary':'default'}}" @click="childrenNumChange('2')">2</van-button></van-col>
-              <van-col span="8"><input type="number" placeholder="自定义" value="{{ childrenNum }}" class="button-input" border="{{false}}" @input="childrenNumChange2"></input></van-col>
-            </van-row>
-          </van-cell>
-        </van-cell-group>
-        <van-cell-group>
-          <van-cell class="cell-title" title="继续教育" @click="open_detail({{edu}})" border="{{false}}">
-            <view slot="icon">
-              <van-icon name="info-o" />
-            </view>
-          </van-cell>
-          <van-cell title="抵扣方式" class="small" border="{{false}}">
-            <van-row class="flex-box">
-              <van-col offset="4" span="10"><van-button round size="small" type="{{ adultEducation == 4800 ? 'primary':'default'}}" @click="eduChange('4800')">学历：4800</van-button></van-col>
-              <van-col span="10"><van-button round size="small" type="{{ adultEducation == 3600 ? 'primary':'default'}}" @click="eduChange('3600')">技术：3600</van-button></van-col>
-            </van-row>
-          </van-cell>
-        </van-cell-group>
-        <van-cell-group>
-          <van-cell class="cell-title" title="赡养老人 2000/月" @click="open_detail({{elder}})" border="{{false}}">
-            <view slot="icon">
-              <van-icon name="info-o" />
-            </view>
-          </van-cell>
-          <van-cell title="兄妹数" class="small" >
-            <van-row class="flex-box">
-              <van-col span="8"><van-button round size="small" type="{{ brotherNum == 1 ? 'primary':'default'}}" @click="brotherNumChange('1')">1</van-button></van-col>
-              <van-col span="8"><van-button round size="small" type="{{ brotherNum == 2 ? 'primary':'default'}}" @click="brotherNumChange('2')">2</van-button></van-col>
-              <van-col span="8"><input type="number" placeholder="自定义" value="{{ brotherNum }}" class="button-input" border="{{false}}" @input="brotherNumChange2"></input></van-col>
-            </van-row>
-          </van-cell>
-        </van-cell-group>
-        <van-cell-group>
-          <van-cell class="cell-title" title="住房支出" @click="open_detail({{house}})" border="{{false}}">
-            <view slot="icon">
-              <van-icon name="info-o" />
-            </view>
-          </van-cell>
-          <van-cell title="首套房贷利息" class="small" border="{{false}}">
-            <van-row class="flex-box">
-              <van-col offset="12" span="12"><van-button round size="small" type="{{ housing == 1001 ? 'primary':'default'}}" @click="houseChange('1001')">1000/月</van-button></van-col>
-            </van-row>
-          </van-cell>
-          <van-cell title="租房扣除" class="small" >
-            <van-row class="flex-box">
-              <van-col span="8"><van-button round size="small" type="{{housing == 1200 ? 'primary':'default'}}" @click="houseChange('1200')">1200/月</van-button></van-col>
-              <van-col span="8"><van-button round size="small" type="{{housing == 1000 ? 'primary':'default'}}" @click="houseChange('1000')">1000/月</van-button></van-col>
-              <van-col span="8"><van-button round size="small" type="{{housing == 800 ? 'primary':'default'}}" @click="houseChange('800')">800/月</van-button></van-col>
-            </van-row>
-          </van-cell>
-        </van-cell-group>
-        <van-cell-group>
-          <van-cell class="cell-title" title="大病医疗支出" @click="open_detail({{illness}})" border="{{false}}">
-            <view slot="icon">
-              <van-icon name="info-o" />
-            </view>
-          </van-cell>
-          <van-field
-              class="small"
-              value="{{ medicalExpenses }}"
-              label="医疗费用"
-              placeholder="请输入"
-              input-align="right"
-              @input="medicalExpensesChange"
-            />
-        </van-cell-group>
-      </van-panel>
-      <view style="font-size:24rpx;margin-top:16rpx">*说明：计算结果仅供参考；由 <text style="color:#f64a42">e账柜</text> 提供；</view>
+      <view>
+        <van-panel title="抵扣项" class="panel-content" >
+          <van-cell-group>
+            <van-cell class="cell-title" title="子女教育 1000/人/月" @click="open_detail({{children}})" border="{{false}}">
+              <view slot="icon">
+                <van-icon name="info-o" />
+              </view>
+            </van-cell>
+            <van-cell title="抵扣方式" class="small" border="{{false}}">
+              <van-row class="flex-box">
+                <van-col offset="4" span="10"><van-button round size="small" type="{{ childrenUseNum == 1 ? 'primary':'default'}}" @click="childrenUseNumChange('1')">共同使用</van-button></van-col>
+                <van-col span="10"><van-button round size="small" type="{{ childrenUseNum == 2 ? 'primary':'default'}}" @click="childrenUseNumChange('2')">单独使用</van-button></van-col>
+              </van-row>
+            </van-cell>
+            <van-cell title="子女数" class="small" >
+              <van-row class="flex-box">
+                <van-col span="8"><van-button round size="small" type="{{ childrenNum == 1 ? 'primary':'default'}}" @click="childrenNumChange('1')">1</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{ childrenNum == 2 ? 'primary':'default'}}" @click="childrenNumChange('2')">2</van-button></van-col>
+                <van-col span="8"><input type="number" placeholder="自定义" value="{{ childrenNum }}" class="button-input" border="{{false}}" @input="childrenNumChange2"></input></van-col>
+              </van-row>
+            </van-cell>
+          </van-cell-group>
+          <van-cell-group>
+            <van-cell class="cell-title" title="继续教育" @click="open_detail({{edu}})" border="{{false}}">
+              <view slot="icon">
+                <van-icon name="info-o" />
+              </view>
+            </van-cell>
+            <van-cell title="抵扣方式" class="small" border="{{false}}">
+              <van-row class="flex-box">
+                <van-col offset="4" span="10"><van-button round size="small" type="{{ adultEducation == 4800 ? 'primary':'default'}}" @click="eduChange('4800')">学历：4800</van-button></van-col>
+                <van-col span="10"><van-button round size="small" type="{{ adultEducation == 3600 ? 'primary':'default'}}" @click="eduChange('3600')">技术：3600</van-button></van-col>
+              </van-row>
+            </van-cell>
+          </van-cell-group>
+          <van-cell-group>
+            <van-cell class="cell-title" title="赡养老人 2000/月" @click="open_detail({{elder}})" border="{{false}}">
+              <view slot="icon">
+                <van-icon name="info-o" />
+              </view>
+            </van-cell>
+            <van-cell title="兄妹数" class="small" >
+              <van-row class="flex-box">
+                <van-col span="8"><van-button round size="small" type="{{ brotherNum == 1 ? 'primary':'default'}}" @click="brotherNumChange('1')">1</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{ brotherNum == 2 ? 'primary':'default'}}" @click="brotherNumChange('2')">2</van-button></van-col>
+                <van-col span="8"><input type="number" placeholder="自定义" value="{{ brotherNum }}" class="button-input" border="{{false}}" @input="brotherNumChange2"></input></van-col>
+              </van-row>
+            </van-cell>
+          </van-cell-group>
+          <van-cell-group>
+            <van-cell class="cell-title" title="住房支出" @click="open_detail({{house}})" border="{{false}}">
+              <view slot="icon">
+                <van-icon name="info-o" />
+              </view>
+            </van-cell>
+            <van-cell title="首套房贷利息" class="small" border="{{false}}">
+              <van-row class="flex-box">
+                <van-col offset="12" span="12"><van-button round size="small" type="{{ housing == 1001 ? 'primary':'default'}}" @click="houseChange('1001')">1000/月</van-button></van-col>
+              </van-row>
+            </van-cell>
+            <van-cell title="租房扣除" class="small" >
+              <van-row class="flex-box">
+                <van-col span="8"><van-button round size="small" type="{{housing == 1200 ? 'primary':'default'}}" @click="houseChange('1200')">1200/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 1000 ? 'primary':'default'}}" @click="houseChange('1000')">1000/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 800 ? 'primary':'default'}}" @click="houseChange('800')">800/月</van-button></van-col>
+              </van-row>
+            </van-cell>
+          </van-cell-group>
+          <van-cell-group>
+            <van-cell class="cell-title" title="大病医疗支出" @click="open_detail({{illness}})" border="{{false}}">
+              <view slot="icon">
+                <van-icon name="info-o" />
+              </view>
+            </van-cell>
+            <van-field
+                class="small"
+                value="{{ medicalExpenses }}"
+                label="医疗费用"
+                placeholder="请输入"
+                input-align="right"
+                @input="medicalExpensesChange"
+              />
+          </van-cell-group>
+        </van-panel>
+      </view>
+      <view style="font-size:24rpx;margin-top:16rpx">*说明：计算结果仅供参考；由 <text style="font-weight:800">e账柜</text> 提供；</view>
       <van-button type="primary" size="large" class="submitButton" @click="submit" disabled="{{disable}}" loading="{{loading}}">计算</van-button>
       <van-button type="default" size="large" class="submitButton" @click="reset">重置</van-button>
     </block>
@@ -189,6 +194,7 @@
 <script>
   import Dialog from '../components/vant/dialog/dialog'
   import Toast from '../components/vant//toast/toast'
+  import Table from '../components/table'
   import wepy from 'wepy'
 
   export default class Index extends wepy.page {
@@ -212,13 +218,13 @@
       }
     }
     components = {
-
+      Table
     }
 
     mixins = []
 
     data = {
-      result: true,
+      result: false,
       loading: false,
       buttonType: 'default',
       activeTab: 0,
@@ -345,7 +351,7 @@
         }
         _self.loading = true
         wepy.request({
-          url: 'http://cloud.yrl.fun/api/store/tools/tax/calculate',
+          url: 'https://cloud.zgcfo.com/api/store/tools/tax/calculate',
           data: {
             type: _self.type,
             monthIncome: _self.income,

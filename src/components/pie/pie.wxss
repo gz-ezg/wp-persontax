@@ -1,6 +1,6 @@
 .container {
-  position: absolute;
-  width: 80%;
+  /* position: absolute; */
   height: 300rpx;
   margin-top: 30rpx;
+  background-color: #ffffff;
 }

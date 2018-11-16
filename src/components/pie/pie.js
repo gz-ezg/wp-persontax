@@ -2,8 +2,8 @@ import F2 from '../f2-canvas/lib/f2';
 
 let chart = null;
 let count = [
-  { name: '芳华', percent: 12, a: '1' },
-  { name: '妖猫传', percent: 6, a: '1' },
+  { name: '应纳个税', percent: 12, a: '1' },
+  { name: '税后工资', percent: 6, a: '1' },
 ];
 function initChart(canvas, width, height) {
   const data = count
@@ -12,13 +12,7 @@ function initChart(canvas, width, height) {
     width,
     height
   });
-  chart.source(data, {
-    percent: {
-      formatter(val) {
-        return val * 100 + '%';
-      }
-    }
-  });
+  chart.source(data);
   chart.legend({
     position: 'right',
     // itemFormatter(val) {
@@ -33,7 +27,7 @@ function initChart(canvas, width, height) {
   chart.axis(false);
   chart.interval()
     .position('a*percent')
-    .color('name', ['#1890FF', '#13C2C2'])
+    .color('name', ['#f64a42', '#666666'])
     .adjust('stack')
     .style({
       lineWidth: 2,
@@ -52,14 +46,21 @@ function initChart(canvas, width, height) {
   return chart;
 }
 
-Page({
+Component({
   data: {
     opts: {
       // lazyLoad: true,
       onInit: initChart
     },
   },
-  taxTotal(){
-    // console.log("12")
+  properties: {
+    taxTotal: Number || String,
+    taxAfter: Number || String
+  },
+  ready(){
+    console.log(this.data.taxTotal)
+    console.log(this.data.taxAfter)
+    count[0].percent = this.data.taxAfter
+    count[1].percent = this.data.taxTotal
   }
 });
