@@ -6,12 +6,6 @@
 import wepy from 'wepy'
 import 'wepy-async-function'
 
-import { setStore } from 'wepy-redux'
-import configStore from './store'
-
-const store = configStore()
-setStore(store)
-
 export default class extends wepy.app {
   config = {
     pages: [
@@ -20,7 +14,7 @@ export default class extends wepy.app {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#f64a42',
-      navigationBarTitleText: '个税计算',
+      navigationBarTitleText: '个税计算管家',
       navigationBarTextStyle: 'black'
     }
   }

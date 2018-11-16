@@ -2,8 +2,8 @@ import F2 from '../f2-canvas/lib/f2';
 
 let chart = null;
 let count = [
-  { name: '应纳个税', percent: 12, a: '1' },
-  { name: '税后工资', percent: 6, a: '1' },
+  { name: '应纳个税', percent: 0, a: '1' },
+  { name: '税后工资', percent: 0, a: '1' },
 ];
 function initChart(canvas, width, height) {
   const data = count
@@ -27,7 +27,7 @@ function initChart(canvas, width, height) {
   chart.axis(false);
   chart.interval()
     .position('a*percent')
-    .color('name', ['#f64a42', '#666666'])
+    .color('name', ['#666666', '#f64a42'])
     .adjust('stack')
     .style({
       lineWidth: 2,
@@ -60,7 +60,7 @@ Component({
   ready(){
     console.log(this.data.taxTotal)
     console.log(this.data.taxAfter)
-    count[0].percent = this.data.taxAfter
-    count[1].percent = this.data.taxTotal
+    count[0].percent = this.data.taxTotal
+    count[1].percent = this.data.taxAfter
   }
 });

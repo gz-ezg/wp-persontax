@@ -64,15 +64,15 @@
     <van-panel class="panel-title">
       <van-tabs active="{{activeTab}}" @change="onChange">
         <van-tab title="精简版">
-          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change"></van-field>
+          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change" ></van-field>
           <van-field label="起征点" readonly error value="5000" input-align="right"></van-field>
-          <van-field label="五险一金" placeholder="请输入每月实缴五险一金" input-align="right" value="{{insurance}}" bind:change="insurance_change"></van-field>
+          <van-field label="五险一金" placeholder="请输入每月实缴五险一金" input-align="right" value="{{insurance}}" bind:change="insurance_change" ></van-field>
         </van-tab>
         <van-tab title="专业版">
-          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change"></van-field>
+          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change" ></van-field>
           <van-field label="起征点" readonly error value="5000" input-align="right"></van-field>
-          <van-field label="社保基数" placeholder="请输入社保基数" input-align="right" value="{{insuranceBase}}" bind:change="insuranceBase_change"></van-field>
-          <van-field label="公积金基数" placeholder="请输入公积金基数" input-align="right" value="{{reserveFundBase}}" bind:change="reserveFundBase_change"></van-field>
+          <van-field label="社保基数" placeholder="请输入社保基数" input-align="right" value="{{insuranceBase}}" bind:change="insuranceBase_change" ></van-field>
+          <van-field label="公积金基数" placeholder="请输入公积金基数" input-align="right" value="{{reserveFundBase}}" bind:change="reserveFundBase_change" ></van-field>
         </van-tab>
       </van-tabs>
     </van-panel>
@@ -199,7 +199,7 @@
 
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '个税计算',
+      navigationBarTitleText: '个税计算管家',
       usingComponents: {
         'van-button': '../components/vant/button/index',
         'van-panel': '../components/vant/panel/index',
@@ -371,13 +371,16 @@
               _self.taxTotal = res.data.data.taxTotal
               _self.taxAfter = res.data.data.taxAfter
               this.$apply()
+              wx.pageScrollTo({
+                scrollTop: 0
+              })
               // console.log(res.data.data)
             } else {
               Toast.fail(res.data.msg)
             }
           },
           fail: (err) => {
-            console.log(err)
+            Toast.fail(err.data.msg)
           },
           complete: () => {
             _self.loading = false
@@ -405,6 +408,9 @@
         this.housing = ''
         this.medicalExpenses = ''
         this.insurance = ''
+        wx.pageScrollTo({
+          scrollTop: 0
+        })
       }
     }
 
