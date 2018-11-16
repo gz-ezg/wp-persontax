@@ -1,0 +1,15 @@
+{
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "touristappid",
+	"projectname": "e%E8%B4%A6%E6%9F%9C-%E4%B8%AA%E7%A8%8E%E8%AE%A1%E7%AE%97",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

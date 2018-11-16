@@ -1,0 +1,413 @@
+<style lang="less">
+.container{
+  padding:20rpx;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.submitButton .van-button--large{
+  margin-top:20rpx
+}
+.panel-content .van-panel{
+  margin-top:30rpx
+}
+.cell-title .van-cell{
+  display: flex;
+  align-items: center;
+}
+.cell-title .van-icon{
+  display: flex;
+  margin-right:10rpx;
+}
+.cell-title .van-cell__title{
+  font-size: 24rpx;
+}
+.small .van-cell__title{
+    font-size: 12px;
+    flex: 1;
+    // margin: 20rpx 24rpx
+}
+.small .van-cell__value{
+    font-size: 12px;
+    flex: 2.5;
+    text-align: left;
+    // padding: 5px;
+}
+.small .van-button--small {
+  font-size: 28rpx;
+  padding: 0 18rpx;
+}
+.button-input{
+  height:28px;
+  border-radius:10em;
+  border:1px solid #eee;
+  text-align:center;
+  vertical-align:middle;
+  float: right;
+  width: 80%;
+}
+.flex-box .van-button--round{
+  float: right;
+}
+.van-panel-red .van-cell__title{
+  margin-top: 40rpx;
+  text-align: center;
+  color: #f64a42
+}
+</style>
+<template>
+  <view class="container">
+    <van-panel class="panel-title">
+      <van-tabs active="{{activeTab}}" @change="onChange">
+        <van-tab title="精简版">
+          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change"></van-field>
+          <van-field label="起征点" readonly error value="5000" input-align="right"></van-field>
+          <van-field label="五险一金" placeholder="请输入每月实缴五险一金" input-align="right" value="{{insurance}}" bind:change="insurance_change"></van-field>
+        </van-tab>
+        <van-tab title="专业版">
+          <van-field label="月收入" placeholder="请输入当前收入" input-align="right" value="{{income}}" bind:change="income_change"></van-field>
+          <van-field label="起征点" readonly error value="5000" input-align="right"></van-field>
+          <van-field label="社保基数" placeholder="请输入社保基数" input-align="right" value="{{insuranceBase}}" bind:change="insuranceBase_change"></van-field>
+          <van-field label="公积金基数" placeholder="请输入公积金基数" input-align="right" value="{{reserveFundBase}}" bind:change="reserveFundBase_change"></van-field>
+        </van-tab>
+      </van-tabs>
+    </van-panel>
+    <block wx:if="{{result}}">
+      <view style="width:90%;margin:auto">
+        <van-panel-red title="计算结果" class="red-title">
+          <van-cell-group>
+            <van-cell title="应缴个税" value="{{taxTotal}}"></van-cell>
+            <van-cell title="税后工资" value="{{taxAfter}}"></van-cell>
+          </van-cell-group>
+          <view style="margin-top:10rpx">
+            <van-button type="default" size="large" @click="reset_count">重新计算</van-button>
+          </view>
+          <!-- <view style="margin-top:10rpx">
+            <ff-canvas id="column-dom" canvas-id="column" opts="{{ opts }}"></ff-canvas>
+          </view> -->
+        </van-panel-red>
+        <view>
+          <pie taxTotal="{{taxTotal}}" taxAfter="{{taxAfter}}"></pie>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <van-panel title="抵扣项" class="panel-content" >
+        <van-cell-group>
+          <van-cell class="cell-title" title="子女教育 1000/人/月" @click="open_detail({{children}})" border="{{false}}">
+            <view slot="icon">
+              <van-icon name="info-o" />
+            </view>
+          </van-cell>
+          <van-cell title="抵扣方式" class="small" border="{{false}}">
+            <van-row class="flex-box">
+              <van-col offset="4" span="10"><van-button round size="small" type="{{ childrenUseNum == 1 ? 'primary':'default'}}" @click="childrenUseNumChange('1')">共同使用</van-button></van-col>
+              <van-col span="10"><van-button round size="small" type="{{ childrenUseNum == 2 ? 'primary':'default'}}" @click="childrenUseNumChange('2')">单独使用</van-button></van-col>
+            </van-row>
+          </van-cell>
+          <van-cell title="子女数" class="small" >
+            <van-row class="flex-box">
+              <van-col span="8"><van-button round size="small" type="{{ childrenNum == 1 ? 'primary':'default'}}" @click="childrenNumChange('1')">1</van-button></van-col>
+              <van-col span="8"><van-button round size="small" type="{{ childrenNum == 2 ? 'primary':'default'}}" @click="childrenNumChange('2')">2</van-button></van-col>
+              <van-col span="8"><input type="number" placeholder="自定义" value="{{ childrenNum }}" class="button-input" border="{{false}}" @input="childrenNumChange2"></input></van-col>
+            </van-row>
+          </van-cell>
+        </van-cell-group>
+        <van-cell-group>
+          <van-cell class="cell-title" title="继续教育" @click="open_detail({{edu}})" border="{{false}}">
+            <view slot="icon">
+              <van-icon name="info-o" />
+            </view>
+          </van-cell>
+          <van-cell title="抵扣方式" class="small" border="{{false}}">
+            <van-row class="flex-box">
+              <van-col offset="4" span="10"><van-button round size="small" type="{{ adultEducation == 4800 ? 'primary':'default'}}" @click="eduChange('4800')">学历：4800</van-button></van-col>
+              <van-col span="10"><van-button round size="small" type="{{ adultEducation == 3600 ? 'primary':'default'}}" @click="eduChange('3600')">技术：3600</van-button></van-col>
+            </van-row>
+          </van-cell>
+        </van-cell-group>
+        <van-cell-group>
+          <van-cell class="cell-title" title="赡养老人 2000/月" @click="open_detail({{elder}})" border="{{false}}">
+            <view slot="icon">
+              <van-icon name="info-o" />
+            </view>
+          </van-cell>
+          <van-cell title="兄妹数" class="small" >
+            <van-row class="flex-box">
+              <van-col span="8"><van-button round size="small" type="{{ brotherNum == 1 ? 'primary':'default'}}" @click="brotherNumChange('1')">1</van-button></van-col>
+              <van-col span="8"><van-button round size="small" type="{{ brotherNum == 2 ? 'primary':'default'}}" @click="brotherNumChange('2')">2</van-button></van-col>
+              <van-col span="8"><input type="number" placeholder="自定义" value="{{ brotherNum }}" class="button-input" border="{{false}}" @input="brotherNumChange2"></input></van-col>
+            </van-row>
+          </van-cell>
+        </van-cell-group>
+        <van-cell-group>
+          <van-cell class="cell-title" title="住房支出" @click="open_detail({{house}})" border="{{false}}">
+            <view slot="icon">
+              <van-icon name="info-o" />
+            </view>
+          </van-cell>
+          <van-cell title="首套房贷利息" class="small" border="{{false}}">
+            <van-row class="flex-box">
+              <van-col offset="12" span="12"><van-button round size="small" type="{{ housing == 1001 ? 'primary':'default'}}" @click="houseChange('1001')">1000/月</van-button></van-col>
+            </van-row>
+          </van-cell>
+          <van-cell title="租房扣除" class="small" >
+            <van-row class="flex-box">
+              <van-col span="8"><van-button round size="small" type="{{housing == 1200 ? 'primary':'default'}}" @click="houseChange('1200')">1200/月</van-button></van-col>
+              <van-col span="8"><van-button round size="small" type="{{housing == 1000 ? 'primary':'default'}}" @click="houseChange('1000')">1000/月</van-button></van-col>
+              <van-col span="8"><van-button round size="small" type="{{housing == 800 ? 'primary':'default'}}" @click="houseChange('800')">800/月</van-button></van-col>
+            </van-row>
+          </van-cell>
+        </van-cell-group>
+        <van-cell-group>
+          <van-cell class="cell-title" title="大病医疗支出" @click="open_detail({{illness}})" border="{{false}}">
+            <view slot="icon">
+              <van-icon name="info-o" />
+            </view>
+          </van-cell>
+          <van-field
+              class="small"
+              value="{{ medicalExpenses }}"
+              label="医疗费用"
+              placeholder="请输入"
+              input-align="right"
+              @input="medicalExpensesChange"
+            />
+        </van-cell-group>
+      </van-panel>
+      <view style="font-size:24rpx;margin-top:16rpx">*说明：计算结果仅供参考；由 <text style="color:#f64a42">e账柜</text> 提供；</view>
+      <van-button type="primary" size="large" class="submitButton" @click="submit" disabled="{{disable}}" loading="{{loading}}">计算</van-button>
+      <van-button type="default" size="large" class="submitButton" @click="reset">重置</van-button>
+    </block>
+    <van-dialog id="van-dialog" />
+    <van-toast id="van-toast" />
+  </view>
+</template>
+
+<script>
+  import Dialog from '../components/vant/dialog/dialog'
+  import Toast from '../components/vant//toast/toast'
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '个税计算',
+      usingComponents: {
+        'van-button': '../components/vant/button/index',
+        'van-panel': '../components/vant/panel/index',
+        'van-row': '../components/vant/row/index',
+        'van-col': '../components/vant/col/index',
+        'van-field': '../components/vant/field/index',
+        'van-tab': '../components/vant/tab/index',
+        'van-tabs': '../components/vant/tabs/index',
+        'van-cell': '../components/vant/cell/index',
+        'van-cell-group': '../components/vant/cell-group/index',
+        'van-icon': '../components/vant/icon/index',
+        'van-dialog': '../components/vant/dialog/index',
+        'van-toast': '../components/vant/toast/index',
+        'van-panel-red': '../components/vant/panelred/index',
+        'pie': '../components/pie/pie'
+      }
+    }
+    components = {
+
+    }
+
+    mixins = []
+
+    data = {
+      result: true,
+      loading: false,
+      buttonType: 'default',
+      activeTab: 0,
+      income: '',
+      insuranceBase: '',
+      reserveFundBase: '',
+      childrenUseNum: '',
+      childrenNum: '',
+      adultEducation: '',
+      brotherNum: '',
+      housing: '',
+      medicalExpenses: '',
+      insurance: '',
+      children: {
+        title: '',
+        content: `按照每个子女每年12000元（每月1000元）的标准定额扣除。这意味着，有两个孩纸的家庭见你跟该享受到每年24000元的定额扣除。
+                    每年12000元或24000元的扣除，既可以父母一年扣50%，也可以由乙方扣除100%，具体扣除方式在一个那谁年度内不得变更。`
+      },
+      edu: {
+        title: '学历继续教育和技能人员职业资格继续教育',
+        content: `在学历教育期间按照每年4800元（每月400元）定额扣除。
+        技能人员职业资格继续教育、专业技术人员职业资格继续教育支出，在取得相关证书的年度，按照每年3600元定额扣除。`
+      },
+      elder: {
+        title: '',
+        content: `
+          纳税人赡养60岁（含）以上父母以及其他法定赡养人的赡养支出，可以进行扣除；其中分为独生子女和非独生子女两种情况。
+          纳税人为独生子女的，按照每年24000元（每月2000元）的标准定额扣除；
+          纳税人为非独生子女的，可以分摊24000元（每月2000元）的扣除额度，如平均分摊、约定分摊等方式，分摊方式一个纳税年度年度内不得变更。此外，每一纳税人分摊的扣除额最高不得超过每年12000元（每月1000元）。`
+      },
+      house: {
+        title: '',
+        content: `
+          首套房贷利息扣除：
+          纳税人本人或配偶使用商业银行或住房公积金个人住房贷款为本人或其配偶购买住房，发生的首套住房贷款利息支出，在偿还贷款期间，可以按照每年12000元（每月1000元）标准定额扣除。非首套住房贷款利息支出，纳税人不得扣除。纳税人只能享受一套首套住房贷款利息扣除。
+          经夫妻双方约定，可以选择由其中一方扣除，具体扣除方式在一个纳税年度内不得变更。
+          租房扣除：
+          承租的住房位于直辖市、省会城市、计划单列市以及国务院确定的其他城市，扣除标准为每年14400元（每月1200元）。
+          承租的住房位于其他城市的，市辖区户籍人口超过100万的，扣除标准为每年12000元（每月1000元）。
+          承租的住房位于其他城市的，市辖区户籍人口不超过100万（含）的，扣除标准为每年9600元（每月800元）。`
+      },
+      illness: {
+        title: '',
+        content: `一个纳税年度内，在社会医疗保险管理信息系统记录的（包括医保目录范围内的自付部分和医保目录范围外的自费部分）由个人负担超过15000元的医药费用支出部分，为大病医疗支出，可以按照每年60000元标准限额据实扣除。大病医疗专项附加扣除由纳税人办理汇算清缴时扣除。
+        `
+      },
+      taxTotal: '0',
+      taxAfter: '0',
+      type: ''
+    }
+
+    computed = {
+      disable() {
+        if (this.income && ((this.insurance && !this.type) || (this.type === 'specialty' && this.insuranceBase && this.reserveFundBase))) {
+          return false
+        } else {
+          return true
+        }
+      }
+    }
+
+    methods = {
+      onChange(e) {
+        this.activeTab = e.detail.index
+        console.log(e.detail.index)
+        if (e.detail.index === 1) {
+          this.type = 'specialty'
+        } else {
+          this.type = ''
+          this.insuranceBase = ''
+          this.reserveFundBase = ''
+        }
+      },
+      insuranceBase_change(e) {
+        this.insuranceBase = e.detail
+      },
+      reserveFundBase_change(e) {
+        this.reserveFundBase = e.detail
+      },
+      income_change(e) {
+        this.income = e.detail
+      },
+      insurance_change(e) {
+        this.insurance = e.detail
+      },
+      open_detail(e) {
+        Dialog.alert({
+          title: e.title,
+          message: e.content,
+          closeOnClickOverlay: true
+        })
+      },
+      childrenUseNumChange(e) {
+        this.childrenUseNum = e
+      },
+      childrenNumChange(e) {
+        this.childrenNum = e
+      },
+      childrenNumChange2(e) {
+        this.childrenNum = e.detail.value
+      },
+      eduChange(e) {
+        this.adultEducation = e
+      },
+      brotherNumChange(e) {
+        this.brotherNum = e
+      },
+      brotherNumChange2(e) {
+        this.brotherNum = e.detail.value
+      },
+      houseChange(e) {
+        this.housing = e
+      },
+      medicalExpensesChange(e) {
+        this.medicalExpenses = e.detail
+      },
+      submit() {
+        let _self = this
+        let housingTemp = 0
+        if (_self.housing === 1001) {
+          housingTemp = 1000
+        } else {
+          housingTemp = this.housing
+        }
+        _self.loading = true
+        wepy.request({
+          url: 'http://cloud.yrl.fun/api/store/tools/tax/calculate',
+          data: {
+            type: _self.type,
+            monthIncome: _self.income,
+            insurance: _self.insurance,
+            adultEducation: _self.adadultEducation,
+            childrenNum: _self.childrenNum,
+            childrenUseNum: _self.childrenUseNum,
+            brotherNum: _self.brotherNum,
+            housing: housingTemp,
+            medicalExpenses: _self.medicalExpenses,
+            insuranceBase: _self.insuranceBase,
+            reserveFundBase: _self.reserveFundBase
+          },
+          success: (res) => {
+            if (res.data.msgCode === '40000') {
+              _self.result = true
+              _self.taxTotal = res.data.data.taxTotal
+              _self.taxAfter = res.data.data.taxAfter
+              this.$apply()
+              // console.log(res.data.data)
+            } else {
+              Toast.fail(res.data.msg)
+            }
+          },
+          fail: (err) => {
+            console.log(err)
+          },
+          complete: () => {
+            _self.loading = false
+            this.$apply()
+          }
+        })
+      },
+      reset() {
+        this.income = ''
+        this.childrenUseNum = ''
+        this.childrenNum = ''
+        this.adultEducation = ''
+        this.brotherNum = ''
+        this.housing = ''
+        this.medicalExpenses = ''
+        this.insurance = ''
+      },
+      reset_count() {
+        this.result = false
+        this.income = ''
+        this.childrenUseNum = ''
+        this.childrenNum = ''
+        this.adultEducation = ''
+        this.brotherNum = ''
+        this.housing = ''
+        this.medicalExpenses = ''
+        this.insurance = ''
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad() {
+
+    }
+  }
+</script>
