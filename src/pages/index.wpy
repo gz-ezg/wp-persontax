@@ -419,7 +419,17 @@
     }
 
     onLoad() {
+      wepy.showShareMenu({
+        // withShareTicket: true
+      })
+      console.log('load')
+    }
 
+    onShareAppMessage() {
+      return {
+        title: '快来算一下你的个税吧！',
+        path: '/pages/index'
+      }
     }
   }
 </script>
