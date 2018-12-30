@@ -79,8 +79,10 @@
     </van-panel>
     <block wx:if="{{result}}">
       <view>
-        <van-panel-red title="计算结果" class="red-title">
+        <van-panel-red class="red-title">
+          <view style="text-align:center;padding:10rpx">计算结果</view>
           <van-cell-group>
+            <van-cell title="应付工资" value="{{allMoney}}"></van-cell>
             <van-cell title="应缴个税" value="{{taxTotal}}"></van-cell>
             <van-cell title="税后工资" value="{{taxAfter}}"></van-cell>
           </van-cell-group>
@@ -274,6 +276,7 @@
       },
       taxTotal: '0',
       taxAfter: '0',
+      allMoney: '0',
       type: ''
     }
 
@@ -374,8 +377,9 @@
           success: (res) => {
             if (res.data.msgCode === '40000') {
               _self.result = true
+              _self.allMoney = (res.data.data.taxbefore - res.data.data.insurance).toFixed(0)
               _self.taxTotal = res.data.data.taxTotal
-              _self.taxAfter = res.data.data.taxAfter
+              _self.taxAfter = (res.data.data.taxAfter - res.data.data.insurance).toFixed(0)
               this.$apply()
               wx.pageScrollTo({
                 scrollTop: 0
