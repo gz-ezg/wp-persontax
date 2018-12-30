@@ -61,6 +61,7 @@
 </style>
 <template>
   <view class="container">
+    <official-account></official-account>
     <van-panel class="panel-title">
       <van-tabs active="{{activeTab}}" @change="onChange">
         <van-tab title="精简版">
@@ -422,7 +423,7 @@
       wepy.showShareMenu({
         // withShareTicket: true
       })
-      console.log('load')
+      // console.log('load')
     }
 
     onShareAppMessage() {
