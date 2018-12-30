@@ -154,13 +154,13 @@
             </van-cell>
             <van-cell title="首套房贷利息" class="small" border="{{false}}">
               <van-row class="flex-box">
-                <van-col offset="12" span="12"><van-button round size="small" type="{{ housing == 1001 ? 'primary':'default'}}" @click="houseChange('1001')">1000/月</van-button></van-col>
+                <van-col offset="12" span="12"><van-button round size="small" type="{{ housing == 1000 ? 'primary':'default'}}" @click="houseChange('1000')">1000/月</van-button></van-col>
               </van-row>
             </van-cell>
             <van-cell title="租房扣除" class="small" >
               <van-row class="flex-box">
-                <van-col span="8"><van-button round size="small" type="{{housing == 1200 ? 'primary':'default'}}" @click="houseChange('1200')">1200/月</van-button></van-col>
-                <van-col span="8"><van-button round size="small" type="{{housing == 1000 ? 'primary':'default'}}" @click="houseChange('1000')">1000/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 1500 ? 'primary':'default'}}" @click="houseChange('1500')">1200/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 1100 ? 'primary':'default'}}" @click="houseChange('1100')">1000/月</van-button></van-col>
                 <van-col span="8"><van-button round size="small" type="{{housing == 800 ? 'primary':'default'}}" @click="houseChange('800')">800/月</van-button></van-col>
               </van-row>
             </van-cell>
