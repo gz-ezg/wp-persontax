@@ -58,8 +58,8 @@ Component({
     taxAfter: Number || String
   },
   ready(){
-    console.log(this.data.taxTotal)
-    console.log(this.data.taxAfter)
+    // console.log(this.data.taxTotal)
+    // console.log(this.data.taxAfter)
     count[0].percent = this.data.taxTotal
     count[1].percent = this.data.taxAfter
   }
