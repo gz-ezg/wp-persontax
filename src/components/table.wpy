@@ -43,51 +43,51 @@
       <view class="table">
           <view class="tr" >
               <view class="th td1">级数</view>
-              <view class="th td2">应纳税所得额(含税)</view>
+              <view class="th td2">累计预扣预缴应纳税所得额</view>
               <view class="th td3">税率(%)</view>
               <view class="th td4">速算扣除数</view>
           </view>
           <view class="tr">
               <view class="td td1">1</view>
-              <view class="td td2">未超过3,000元的部分</view>
+              <view class="td td2">未超过36,000元的部分</view>
               <view class="td td3">3</view>
               <view class="td td4">0</view>
           </view>
           <view class="tr">
               <view class="td td1">2</view>
-              <view class="td td2">超过3,000元至12,000元的部分</view>
+              <view class="td td2">超过36,000元至144,000元的部分</view>
               <view class="td td3">10</view>
-              <view class="td td4">210</view>
+              <view class="td td4">2520</view>
           </view>
           <view class="tr">
               <view class="td td1">3</view>
-              <view class="td td2">超过12,000元至25,000元的部分</view>
+              <view class="td td2">超过144,000元至300,000元的部分</view>
               <view class="td td3">20</view>
-              <view class="td td4">1410</view>
+              <view class="td td4">16920</view>
           </view>
           <view class="tr">
               <view class="td td1">4</view>
-              <view class="td td2">超过25,000元至35,000元的部分</view>
+              <view class="td td2">超过300,000元至420,000元的部分</view>
               <view class="td td3">25</view>
-              <view class="td td4">2660</view>
+              <view class="td td4">31920</view>
           </view>
           <view class="tr">
               <view class="td td1">5</view>
-              <view class="td td2">超过35,000元至55,000元的部分</view>
+              <view class="td td2">超过420,000元至660,000元的部分</view>
               <view class="td td3">30</view>
-              <view class="td td4">4410</view>
+              <view class="td td4">52920</view>
           </view>
           <view class="tr">
               <view class="td td1">6</view>
-              <view class="td td2">超过55,000元至80,000元的部分</view>
+              <view class="td td2">超过660,000元至960,000元的部分</view>
               <view class="td td3">35</view>
-              <view class="td td4">7160</view>
+              <view class="td td4">85920</view>
           </view>
           <view class="tr">
               <view class="td td1">7</view>
-              <view class="td td2">超过80,000元的部分</view>
+              <view class="td td2">超过96,000元的部分</view>
               <view class="td td3">45</view>
-              <view class="td td4">15160</view>
+              <view class="td td4">181920</view>
           </view>
       </view>
   </view>

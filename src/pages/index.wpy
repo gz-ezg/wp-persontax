@@ -160,8 +160,8 @@
             </van-cell>
             <van-cell title="租房扣除" class="small" >
               <van-row class="flex-box">
-                <van-col span="8"><van-button round size="small" type="{{housing == 1500 ? 'primary':'default'}}" @click="houseChange('1500')">1200/月</van-button></van-col>
-                <van-col span="8"><van-button round size="small" type="{{housing == 1100 ? 'primary':'default'}}" @click="houseChange('1100')">1000/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 1500 ? 'primary':'default'}}" @click="houseChange('1500')">1500/月</van-button></van-col>
+                <van-col span="8"><van-button round size="small" type="{{housing == 1100 ? 'primary':'default'}}" @click="houseChange('1100')">1100/月</van-button></van-col>
                 <van-col span="8"><van-button round size="small" type="{{housing == 800 ? 'primary':'default'}}" @click="houseChange('800')">800/月</van-button></van-col>
               </van-row>
             </van-cell>
@@ -319,37 +319,41 @@
         })
       },
       childrenUseNumChange(e) {
-        this.childrenUseNum = e
+        this.childrenUseNum = this.childrenUseNum == e?"":e
       },
       childrenNumChange(e) {
+        if(this.childrenNum == e){
+          this.childrenNum = ""
+          return ;
+        }
         this.childrenNum = e
       },
       childrenNumChange2(e) {
         this.childrenNum = e.detail.value
       },
       eduChange(e) {
-        this.adultEducation = e
+        this.adultEducation = this.adultEducation == e ? "" : e
       },
       brotherNumChange(e) {
-        this.brotherNum = e
+        this.brotherNum = this.brotherNum == e ? "" : e
       },
       brotherNumChange2(e) {
         this.brotherNum = e.detail.value
       },
       houseChange(e) {
-        this.housing = e
+        this.housing = this.housing == e ? "" : e
       },
       medicalExpensesChange(e) {
         this.medicalExpenses = e.detail
       },
       submit() {
         let _self = this
-        let housingTemp = 0
-        if (_self.housing === 1001) {
-          housingTemp = 1000
-        } else {
-          housingTemp = this.housing
-        }
+        // let housingTemp = 0
+        // if (_self.housing === 1001) {
+        //   housingTemp = 1000
+        // } else {
+        //   housingTemp = this.housing
+        // }
         _self.loading = true
         wepy.request({
           url: 'https://cloud.zgcfo.com/api/store/tools/tax/calculate',
@@ -361,10 +365,11 @@
             childrenNum: _self.childrenNum,
             childrenUseNum: _self.childrenUseNum,
             brotherNum: _self.brotherNum,
-            housing: housingTemp,
+            housing: _self.housing,
             medicalExpenses: _self.medicalExpenses,
             insuranceBase: _self.insuranceBase,
-            reserveFundBase: _self.reserveFundBase
+            reserveFundBase: _self.reserveFundBase,
+            reserveFundRatio: 0.05
           },
           success: (res) => {
             if (res.data.msgCode === '40000') {
